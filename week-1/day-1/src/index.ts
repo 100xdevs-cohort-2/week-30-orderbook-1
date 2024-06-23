@@ -1,7 +1,6 @@
 import express from "express";
 import { OrderInputSchema } from "./types";
 import { orderbook, bookWithQuantity } from "./orderbook";
-import client from "./redisClient";
 
 const BASE_ASSET = 'BTC';
 const QUOTE_ASSET = 'USD';
@@ -52,7 +51,7 @@ interface Fill {
 
 function fillOrder(orderId: string, price: number, quantity: number, side: "buy" | "sell", type?: "ioc"): { status: "rejected" | "accepted"; executedQty: number; fills: Fill[] } {
     const fills: Fill[] = [];
-    const maxFillQuantity = getFillAmount(price, quantity, side);
+    const maxFillQuantity = getFillAmount(price, quantity, side); // 20
     let executedQty = 0;
 
     if (type === 'ioc' && maxFillQuantity < quantity) {
@@ -60,6 +59,7 @@ function fillOrder(orderId: string, price: number, quantity: number, side: "buy"
     }
     
     if (side === 'buy') {
+        // asks should be sorted before you try to fill them
         orderbook.asks.forEach(o => {
             if (o.price <= price && quantity > 0) {
                 console.log("filling ask");
@@ -126,6 +126,7 @@ function fillOrder(orderId: string, price: number, quantity: number, side: "buy"
             bookWithQuantity.asks[price] = (bookWithQuantity.asks[price] || 0) + (quantity);
         }
     }
+
 
     return {
         status: 'accepted',
