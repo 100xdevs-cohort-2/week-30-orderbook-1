@@ -16,8 +16,13 @@ const config: Config = {
         greenBackgroundTransparent: 'rgba(0,194,120,.12)',
         redBackgroundTransparent: 'rgba(234,56,59,.12)',
         baseBackgroundL2: "rgb(32,33,39)",
-        baseBackgroundL3: "rgb(32,33,39)",
-        greenPrimaryButtonBackground: "rgb(0,194,120)"
+        baseBackgroundL3: "rgb(56 58 69)",
+        greenPrimaryButtonBackground: "rgb(0,194,120)",
+        greenText: 'rgb(0 194 120)',
+        redText: 'rgb(253 75 78)',
+        baseTextHighEmphasis: 'rgb(244, 244, 246)',
+        baseTextMedEmphasis: 'rgb(150, 159, 175)',
+        
       },
       borderColor: {
         redBorder: 'rgba(234,56,59,.5)',

@@ -24,7 +24,7 @@ export function Depth({ market }: {market: string}) {
     return <div>
         <TableHeader />
         {asks && <AskTable asks={asks} />}
-        {price && <div>{price}</div>}
+        {price && <div className="text-greenText">{price}</div>}
         {bids && <BidTable bids={bids} />}
     </div>
 }
