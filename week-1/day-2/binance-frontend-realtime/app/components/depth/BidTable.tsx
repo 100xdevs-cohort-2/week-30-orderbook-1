@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 
 export const BidTable = ({ bids }: {bids: [string, string][]}) => {
     let currentTotal = 0; 
@@ -5,10 +6,13 @@ export const BidTable = ({ bids }: {bids: [string, string][]}) => {
     const bidsWithTotal: [string, string, number][] = relevantBids.map(([price, quantity]) => [price, quantity, currentTotal += Number(quantity)]);
     const maxTotal = relevantBids.reduce((acc, [_, quantity]) => acc + Number(quantity), 0);
 
+
     return <div>
         {bidsWithTotal?.map(([price, quantity, total]) => <Bid maxTotal={maxTotal} total={total} key={price} price={price} quantity={quantity} />)}
     </div>
 }
+
+
 
 function Bid({ price, quantity, total, maxTotal }: { price: string, quantity: string, total: number, maxTotal: number }) {
     return (
@@ -33,13 +37,13 @@ function Bid({ price, quantity, total, maxTotal }: { price: string, quantity: st
             }}
         ></div>
             <div className={`flex justify-between text-xs w-full`}>
-                <div>
+                <div className="text-greenText">
                     {price}
                 </div>
-                <div>
+                <div className="text-baseTextHighEmphasis/80">
                     {quantity}
                 </div>
-                <div>
+                <div className="text-baseTextHighEmphasis/80">
                     {total.toFixed(2)}
                 </div>
             </div>

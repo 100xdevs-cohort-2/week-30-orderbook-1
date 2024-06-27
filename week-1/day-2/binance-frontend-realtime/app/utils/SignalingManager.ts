@@ -1,4 +1,5 @@
-import { Ticker } from "./types";
+import { timeStamp } from "console";
+import { Depth, Ticker, Trade } from "./types";
 
 export const BASE_URL = "wss://ws.backpack.exchange/"
 
@@ -27,11 +28,11 @@ export class SignalingManager {
         }
         this.ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
+            console.log(message);
             const type = message.data.e;
             if (this.callbacks[type]) {
                 this.callbacks[type].forEach(({ callback }) => {
                     if (type === "ticker") {
-                        callback(message.data.data);
                         const newTicker: Partial<Ticker> = {
                             lastPrice: message.data.c,
                             high: message.data.h,
@@ -42,6 +43,28 @@ export class SignalingManager {
                         }
                         console.log(newTicker);
                         callback(newTicker);
+                   }else if(type === "depth")
+                   {
+                        
+                        const depthChange  = {
+                            bids : message.data.b,
+                            asks : message.data.a
+                        }
+                        callback(depthChange);
+                   }else if(type === 'trade')
+                   {
+                        
+
+                        const newTrade : Trade= {
+                            id : message.data.t,
+                            isBuyerMaker : message.data.m,
+                            price: message.data.p,
+                            quantity: message.data.q,
+                            quoteQuantity: "",
+                            timestamp: message.data.E / 1000
+                        } 
+
+                        callback(newTrade);
                    }
                 });
             }
