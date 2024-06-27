@@ -5,15 +5,36 @@ import { getDepth, getKlines, getTicker, getTrades } from "../../utils/httpClien
 import { BidTable } from "./BidTable";
 import { AskTable } from "./AskTable";
 import { SignalingManager } from "@/app/utils/SignalingManager";
-import { Depth as DepthType } from "@/app/utils/types";
+import { Depth as DepthType , Trade } from "@/app/utils/types";
+import { Trades } from "../Trades";
 
 
 export function Depth({ market }: {market: string}) {
     const [bids, setBids] = useState<[string, string][]>([]);
     const [asks, setAsks] = useState<[string, string][]>([]);
     const [price, setPrice] = useState<string>();
+    const [latestTrades , setLatestTrades] = useState<Trade[]>([]);
+    const [subSection , setSubSection] = useState<"Book" | "Trades">("Book");
 
 
+    const modifyTrades = (trade : Trade) =>
+    {
+        setLatestTrades((prevTrades : Trade[]) =>
+        {
+            const newTrades = [...prevTrades];
+            const tradeIndex = newTrades.findIndex((t) =>
+            {
+                return t.id === trade.id
+            });
+            if(tradeIndex === -1)
+            {
+                newTrades.unshift(trade);
+                newTrades.pop();
+            }
+            
+            return newTrades;
+        })
+    }
 
     const modifyItems = (setItems : React.Dispatch<React.SetStateAction<[string , string][]>>, item : [string , string] | undefined, ascending = true) => {
     if (item === undefined) return;
@@ -45,11 +66,9 @@ export function Depth({ market }: {market: string}) {
     });
 };
 
-    useEffect(() => {
-        getDepth(market).then(d => {
-            setBids(d.bids.reverse());
-            setAsks(d.asks);
-        });
+    function registerCallbacks()
+    {
+        
         SignalingManager.getInstance().registerCallback("ticker" , (data : any) => {
             setPrice(data.lastPrice);
         } , `ticker-${market}`);
@@ -66,19 +85,65 @@ export function Depth({ market }: {market: string}) {
                });  
         } , `depth-${market}`)
 
-        getTicker(market).then(t => setPrice(t.lastPrice));
-        getTrades(market).then(t => setPrice(t[0].price));
+         SignalingManager.getInstance().registerCallback("trade" , (data : Trade) => 
+        {
+            modifyTrades(data);
+        } , `trade-${market}`);
+    }
+    useEffect(() => {
+        getDepth(market).then(d => {
+            setBids(d.bids.reverse());
+            setAsks(d.asks);
+        });
 
+        registerCallbacks();
+
+        getTicker(market).then(t => setPrice(t.lastPrice));
+        getTrades(market).then(t => {
+            setLatestTrades(t.slice(0 , 20));
+            setPrice(t[0].price);
+        });
+
+        SignalingManager.getInstance().sendMessage({"method":"SUBSCRIBE","params":[`trade.${market}`]});
         SignalingManager.getInstance().sendMessage({"method":"SUBSCRIBE","params":[`depth.200ms.${market}`]});
         return () => {
             SignalingManager.getInstance().deRegisterCallback("depth", `depth-${market}`);
             SignalingManager.getInstance().deRegisterCallback("ticker" , `ticker-${market}`);
+            SignalingManager.getInstance().deRegisterCallback("trade", `trades-${market}`);
+            SignalingManager.getInstance().sendMessage({"method":"UNSUBSCRIBE","params":[`trade.${market}`]});
             SignalingManager.getInstance().sendMessage({"method":"UNSUBSCRIBE","params":[`depth.200ms.${market}`]});
         }
         // getKlines(market, "1h", 1640099200, 1640100800).then(t => setPrice(t[0].close));
     }, [])
 
     
+    return (
+        <div>
+            <div className="flex flex-col h-full ">
+            <div className="px-3 ">
+                <div className="flex flex-row flex-0 gap-5 undefined">
+                    <div className="flex flex-col cursor-pointer justify-center py-2">
+                        <div className={`text-sm font-medium py-1 border-b-2 hover:border-baseTextHighEmphasis hover:text-baseTextHighEmphasis ${subSection === 'Book' ? "border-accentBlue text-baseTextHighEmphasis" : "border-transparent text-baseTextMedEmphasis"}`}
+                            onClick={() => setSubSection('Book')}
+                        >Book</div>
+                    </div>
+                    <div className="flex flex-col cursor-pointer justify-center py-2">
+                        <div className={`text-sm font-medium py-1 border-b-2  hover:border-baseTextHighEmphasis hover:text-baseTextHighEmphasis ${subSection === 'Trades' ? "border-accentBlue text-baseTextHighEmphasis" : "border-transparent text-baseTextMedEmphasis"}`}
+                            onClick={() => setSubSection('Trades')}
+                        >Trades</div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                {subSection === 'Book' ?  <BidAskTable asks={asks} bids={bids} price={price}/> 
+                : 
+                <Trades trades={latestTrades}/>}
+            </div>
+        </div>
+    </div>)
+}
+
+function BidAskTable({asks , price , bids} : {asks : [string, string][] , price : string | undefined , bids : [string, string][]}) {
     return <div>
         <TableHeader />
         {asks && <AskTable asks={asks} />}
@@ -86,7 +151,6 @@ export function Depth({ market }: {market: string}) {
         {bids && <BidTable bids={bids} />}
     </div>
 }
-
 function TableHeader() {
     return <div className="flex justify-between text-xs">
     <div className="text-white">Price</div>
