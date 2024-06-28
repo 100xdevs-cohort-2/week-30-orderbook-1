@@ -1,39 +1,28 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChartManager } from "../utils/ChartManager";
 import { getKlines } from "../utils/httpClient";
 import { KLine } from "../utils/types";
+import { SignalingManager } from "../utils/SignalingManager";
 
 export function TradeView({
   market,
 }: {
   market: string;
 }) {
+
   const chartRef = useRef<HTMLDivElement>(null);
   const chartManagerRef = useRef<ChartManager>(null);
 
   useEffect(() => {
-    const init = async () => {
-      let klineData: KLine[] = [];
-      try {
-        klineData = await getKlines(market, "1h", Math.floor((new Date().getTime() - 1000 * 60 * 60 * 24 * 7) / 1000), Math.floor(new Date().getTime() / 1000)); 
-      } catch (e) { }
-
+    
       if (chartRef) {
         if (chartManagerRef.current) {
           chartManagerRef.current.destroy();
         }
-        console.log(klineData)
+     
         const chartManager = new ChartManager(
           chartRef.current,
-          [
-            ...klineData?.map((x) => ({
-              close: parseFloat(x.close),
-              high: parseFloat(x.high),
-              low: parseFloat(x.low),
-              open: parseFloat(x.open),
-              timestamp: new Date(x.end), 
-            })),
-          ].sort((x, y) => (x.timestamp < y.timestamp ? -1 : 1)) || [],
+          [],
           {
             background: "#0e0f14",
             color: "white",
@@ -42,8 +31,20 @@ export function TradeView({
         //@ts-ignore
         chartManagerRef.current = chartManager;
       }
-    };
-    init();
+
+
+      SignalingManager.getInstance().registerCallback('kline', (data:any)=>{
+        chartManagerRef.current?.update(data);
+
+      }, `Kline-${market}`);
+ 
+      SignalingManager.getInstance().sendMessage({"method":"SUBSCRIBE","params":[`kline.5m.${market}`]});
+
+    return ()=>{
+        SignalingManager.getInstance().deRegisterCallback("kline", `Kline-${market}`);
+        SignalingManager.getInstance().sendMessage({"method":"UNSUBSCRIBE","params":[`kline.5m.${market}`]}	);
+    }
+
   }, [market, chartRef]);
 
   return (

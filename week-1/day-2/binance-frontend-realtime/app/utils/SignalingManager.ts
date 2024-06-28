@@ -1,4 +1,4 @@
-import { Depth, Ticker } from "./types";
+import { Depth, KLine, Ticker } from "./types";
 
 export const BASE_URL = "wss://ws.backpack.exchange/"
 
@@ -51,6 +51,17 @@ export class SignalingManager {
                        }
                        console.log(newDepth);
                        callback(newDepth);
+                   }
+                   if(type === 'kline'){
+                       const newKline = {
+                           close: parseFloat(message.data.c),
+                           start: message.data.t,
+                           high: parseFloat(message.data.h),
+                           low: parseFloat(message.data.l),
+                           open: parseFloat(message.data.o),
+                       }
+                       console.log(newKline);
+                       callback(newKline);
                    }
                 });
             }
