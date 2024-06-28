@@ -1,10 +1,9 @@
 
 export const AskTable = ({ asks }: { asks: [string, string][] }) => {
     let currentTotal = 0;
-    const relevantAsks = asks.slice(0, 15);
-    relevantAsks.reverse();
-    const asksWithTotal: [string, string, number][] = relevantAsks.map(([price, quantity]) => [price, quantity, currentTotal += Number(quantity)]);
-    const maxTotal = relevantAsks.reduce((acc, [_, quantity]) => acc + Number(quantity), 0);
+    asks.reverse();
+    const asksWithTotal: [string, string, number][] = asks.map(([price, quantity]) => [price, quantity, currentTotal += Number(quantity)]);
+    const maxTotal = asks.reduce((acc, [_, quantity]) => acc + Number(quantity), 0);
     asksWithTotal.reverse();
 
     return <div>
@@ -18,15 +17,15 @@ function Ask({price, quantity, total, maxTotal}: {price: string, quantity: strin
         position: "relative",
         width: "100%",
         backgroundColor: "transparent",
-        overflow: "hidden",
+        // overflow: "hidden",
     }}
 >
     <div
         style={{
         position: "absolute",
         top: 0,
-        left: 0,
-        width: `${(100 * total) / maxTotal}%`,
+        right: 0,
+        width: `${(100 * (total)) / maxTotal}%`, 
         height: "100%",
         background: "rgba(228, 75, 68, 0.325)",
         transition: "width 0.3s ease-in-out",
