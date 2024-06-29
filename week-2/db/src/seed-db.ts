@@ -11,7 +11,7 @@ const client = new Client({
 async function initializeDB() {
     await client.connect();
 
-    await client.query(`   
+    await client.query(`
         DROP TABLE IF EXISTS "tata_prices";
         CREATE TABLE "tata_prices"(
             time            TIMESTAMP WITH TIME ZONE NOT NULL,
