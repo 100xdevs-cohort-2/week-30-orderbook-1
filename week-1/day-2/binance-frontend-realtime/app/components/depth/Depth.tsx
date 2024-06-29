@@ -71,7 +71,7 @@ export function DepthComponent({ market }: {market: string}) {
         }
     }, [market])
     
-    return <div className="h-[500px] overflow-y-scroll no-scrollbar ">
+    return <div className="h-[500px] relative overflow-y-scroll no-scrollbar ">
         <TableHeader />
         {asks && <AskTable asks={asks} />}
         {price && <div>{price}</div>}
@@ -80,7 +80,7 @@ export function DepthComponent({ market }: {market: string}) {
 }
 
 function TableHeader() {
-    return <div className="flex justify-between text-xs">
+    return <div className="absolute top-0 left-0 w-full flex justify-between text-xs">
     <div className="text-white">Price</div>
     <div className="text-slate-500">Size</div>
     <div className="text-slate-500">Total</div>

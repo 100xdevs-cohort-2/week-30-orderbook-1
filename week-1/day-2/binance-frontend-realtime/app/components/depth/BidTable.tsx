@@ -15,6 +15,7 @@ function Bid({ price, quantity, total, maxTotal }: { price: string, quantity: st
             style={{
                 display: "flex",
                 position: "relative",
+                marginTop:4,
                 width: "100%",
                 backgroundColor: "transparent",
                 // overflow: "hidden",
