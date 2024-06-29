@@ -7,7 +7,6 @@ import { SignalingManager } from "../utils/SignalingManager";
 export const MarketBar = ({ market }: { market: string }) => {
   const [ticker, setTicker] = useState<Ticker | null>(null);
 
-<<<<<<< HEAD
   useEffect(() => {
     getTicker(market).then(setTicker);
     SignalingManager.getInstance().registerCallback(
@@ -35,30 +34,6 @@ export const MarketBar = ({ market }: { market: string }) => {
     );
     if (ticker) {
     }
-=======
-    useEffect(() => {
-        getTicker(market).then(setTicker);
-        SignalingManager.getInstance().registerCallback("ticker", (data: Partial<Ticker>)  =>  setTicker(prevTicker => ({
-            firstPrice: data?.firstPrice ?? prevTicker?.firstPrice ?? '',
-            high: data?.high ?? prevTicker?.high ?? '',
-            lastPrice: data?.lastPrice ?? prevTicker?.lastPrice ?? '',
-            low: data?.low ?? prevTicker?.low ?? '',
-            priceChange: data?.priceChange ?? prevTicker?.priceChange ?? '',
-            priceChangePercent: data?.priceChangePercent ?? prevTicker?.priceChangePercent ?? '',
-            quoteVolume: data?.quoteVolume ?? prevTicker?.quoteVolume ?? '',
-            symbol: data?.symbol ?? prevTicker?.symbol ?? '',
-            trades: data?.trades ?? prevTicker?.trades ?? '',
-            volume: data?.volume ?? prevTicker?.volume ?? '',
-        })), `TICKER-${market}`);
-        SignalingManager.getInstance().sendMessage({"method":"SUBSCRIBE","params":[`ticker.${market}`]}	);
-
-        return () => {
-            SignalingManager.getInstance().deRegisterCallback("ticker", `TICKER-${market}`);
-            SignalingManager.getInstance().sendMessage({"method":"UNSUBSCRIBE","params":[`ticker.${market}`]}	);
-        }
-    }, [market])
-    // 
->>>>>>> 3617fd85ae94badc4370ca4a5a1bba5634a9b4d0
 
     SignalingManager.getInstance().sendMessage({
       method: "SUBSCRIBE",

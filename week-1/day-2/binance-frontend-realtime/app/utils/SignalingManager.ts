@@ -3,7 +3,6 @@ import { Depth, KLine, Ticker, Trade } from "./types";
 export const BASE_URL = "wss://ws.backpack.exchange/";
 
 export class SignalingManager {
-<<<<<<< HEAD
   private ws: WebSocket;
   private static instance: SignalingManager;
   private bufferedMessages: any[] = [];
@@ -85,100 +84,14 @@ export class SignalingManager {
     if (!this.initialized) {
       this.bufferedMessages.push(messageToSend);
       return;
-=======
-    private ws: WebSocket;
-    private static instance: SignalingManager;
-    private bufferedMessages: any[] = [];
-    private callbacks: any = {};
-    private id: number;
-    private initialized: boolean = false;
-
-    private constructor() {
-        this.ws = new WebSocket(BASE_URL);
-        this.bufferedMessages = [];
-        this.id = 1;
-        this.init();
-    }
-
-    public static getInstance() {
-        if (!this.instance)  {
-            this.instance = new SignalingManager();
-        }
-        return this.instance;
-    }
-
-    init() {
-        this.ws.onopen = () => {
-            this.initialized = true;
-            this.bufferedMessages.forEach(message => {
-                this.ws.send(JSON.stringify(message));
-            });
-            this.bufferedMessages = [];
-        }
-        this.ws.onmessage = (event) => {
-            const message = JSON.parse(event.data);
-            const type = message.data.e;
-            if (this.callbacks[type]) {
-                this.callbacks[type].forEach(({ callback }) => {
-                    if (type === "ticker") {
-                        const newTicker: Partial<Ticker> = {
-                            lastPrice: message.data.c,
-                            high: message.data.h,
-                            low: message.data.l,
-                            volume: message.data.v,
-                            quoteVolume: message.data.V,
-                            symbol: message.data.s,
-                        }
-                        console.log(newTicker);
-                        callback(newTicker);
-                   }
-                   if (type === "depth") {
-                        // const newTicker: Partial<Ticker> = {
-                        //     lastPrice: message.data.c,
-                        //     high: message.data.h,
-                        //     low: message.data.l,
-                        //     volume: message.data.v,
-                        //     quoteVolume: message.data.V,
-                        //     symbol: message.data.s,
-                        // }
-                        // console.log(newTicker);
-                        // callback(newTicker);
-                        const updatedBids = message.data.b;
-                        const updatedAsks = message.data.a;
-                        callback({ bids: updatedBids, asks: updatedAsks });
-                    }
-                });
-            }
-        }
-    }
-
-    sendMessage(message: any) {
-        const messageToSend = {
-            ...message,
-            id: this.id++
-        }
-        if (!this.initialized) {
-            this.bufferedMessages.push(messageToSend);
-            return;
-        }
-        this.ws.send(JSON.stringify(messageToSend));
->>>>>>> 3617fd85ae94badc4370ca4a5a1bba5634a9b4d0
     }
     this.ws.send(JSON.stringify(messageToSend));
   }
 
-<<<<<<< HEAD
   async registerCallback(type: string, callback: any, id: string) {
     this.callbacks[type] = this.callbacks[type] || [];
     this.callbacks[type].push({ callback, id });
   }
-=======
-    async registerCallback(type: string, callback: any, id: string) {
-        this.callbacks[type] = this.callbacks[type] || [];
-        this.callbacks[type].push({ callback, id });
-        // "ticker" => callback
-    }
->>>>>>> 3617fd85ae94badc4370ca4a5a1bba5634a9b4d0
 
   async deRegisterCallback(type: string, id: string) {
     if (this.callbacks[type]) {
