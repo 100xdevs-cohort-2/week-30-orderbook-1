@@ -130,8 +130,24 @@ const MarketTable = ({ data }: { data: MarketData[] }) => {
                 <td className="px-6 py-4">${d.current_price}</td>
                 <td className="px-6 py-4">${d.market_cap}</td>
                 <td className="px-6 py-4">${d.total_volume}</td>
-                <td className="px-6 py-4">${d.market_cap_change_24h}</td>
-                <td className="px-6 py-4">change</td>
+                <td
+                  className={`px-6 py-4 ${
+                    d.market_cap_change_24h.toString().at(0) === "-"
+                      ? "text-[#e4444a]"
+                      : "text-[#08a965]"
+                  } `}
+                >
+                  ${d.market_cap_change_24h}
+                </td>
+                <td
+                  className={`px-6 py-4 ${
+                    d.price_change_24h.toString().at(0) === "-"
+                      ? "text-[#e4444a]"
+                      : "text-[#08a965]"
+                  } `}
+                >
+                  {d.price_change_24h}
+                </td>
               </tr>
             );
           })}

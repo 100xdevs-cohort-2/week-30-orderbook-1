@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import MarketTable from "../components/MarketTable";
 import { getMarketData } from "../utils/httpClient";
-import { useParams } from "next/navigation";
 import { MarketData } from "../utils/types";
 
 export default function Page() {
