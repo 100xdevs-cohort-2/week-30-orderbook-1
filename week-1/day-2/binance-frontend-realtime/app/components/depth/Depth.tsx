@@ -2,6 +2,8 @@
 
 import { BidTable } from "./BidTable";
 import { AskTable } from "./AskTable";
+import { SignalingManager } from "@/app/utils/SignalingManager";
+
 
 export function DepthComponent({
     asks,
@@ -13,7 +15,9 @@ export function DepthComponent({
     price: string,
 }) {
     
-    
+
+
+
     return <div className="relative mt-6">
         <TableHeader />
         <div className="h-[500px] relative overflow-y-scroll no-scrollbar">

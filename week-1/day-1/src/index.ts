@@ -2,7 +2,7 @@ import express from "express";
 import { OrderInputSchema } from "./types";
 import { orderbook, bookWithQuantity } from "./orderbook";
 
-const BASE_ASSET = 'BTC';
+const BASE_ASSET = 'BTC' ;
 const QUOTE_ASSET = 'USD';
 
 const app = express();

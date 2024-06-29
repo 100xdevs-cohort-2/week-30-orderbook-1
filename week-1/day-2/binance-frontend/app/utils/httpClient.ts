@@ -11,10 +11,11 @@ export async function getTicker(market: string): Promise<Ticker> {
     }
     return ticker;
 }
+const x = getTickers()
 
-export async function getTickers(): Promise<Ticker[]> {
-    const response = await axios.get(`${BASE_URL}/tickers`);
-    return response.data;
+export async function getTickers(): Promise<number> {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return 1;
 }
 
 
@@ -31,4 +32,9 @@ export async function getKlines(market: string, interval: string, startTime: num
     const response = await axios.get(`${BASE_URL}/klines?symbol=${market}&interval=${interval}&startTime=${startTime}&endTime=${endTime}`);
     const data: KLine[] = response.data;
     return data.sort((x, y) => (Number(x.end) < Number(y.end) ? -1 : 1));
+}
+
+export async function getMarkets(): Promise<string[]> {
+    const response = await axios.get(`${BASE_URL}/markets`);
+    return response.data;
 }

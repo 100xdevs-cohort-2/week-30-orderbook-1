@@ -1,0 +1,12 @@
+./week-2/engine/node_modules
+./week-2/engine/dist
+./week-2/engine/snapshot.json
+./week-2/engine/coverage
+./week-2/db/node_modules
+./week-2/db/dist
+./week-2/ws/node_modules
+./week-2/ws/dist
+./week-2/api/node_modules
+./week-2/api/dist
+./week-2/mm/node_modules
+./week-2/mm/dist

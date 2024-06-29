@@ -20,11 +20,16 @@ export const MarketBar = ({market}: {market: string}) => {
             symbol: data?.symbol ?? prevTicker?.symbol ?? '',
             trades: data?.trades ?? prevTicker?.trades ?? '',
             volume: data?.volume ?? prevTicker?.volume ?? '',
+
         })), `Ticker-${market}`);
+
+
+
         SignalingManager.getInstance().sendMessage({"method":"SUBSCRIBE","params":[`ticker.${market}`]}	);
 
         return () => {
-            SignalingManager.getInstance().deRegisterCallback("ticker", `Ticker-${market}`);
+            SignalingManager.getInstance().deRegisterCallback("ticker", `TICKER-${market}`);
+
             SignalingManager.getInstance().sendMessage({"method":"UNSUBSCRIBE","params":[`ticker.${market}`]}	);
         }
     }, [market])
