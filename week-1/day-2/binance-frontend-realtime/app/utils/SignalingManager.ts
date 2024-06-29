@@ -6,15 +6,22 @@ export class SignalingManager {
     private ws: WebSocket;
     private static instance: SignalingManager;
     private bufferedMessages: any[] = [];
-    private callbacks: { [type: string]: any[] } = {};
+    private callbacks: any = {};
     private id: number;
     private initialized: boolean = false;
 
-    private constructor(private signalingServerUrl?: string) {
-        this.ws = new WebSocket(signalingServerUrl || BASE_URL);
+    private constructor() {
+        this.ws = new WebSocket(BASE_URL);
         this.bufferedMessages = [];
         this.id = 1;
         this.init();
+    }
+
+    public static getInstance() {
+        if (!this.instance)  {
+            this.instance = new SignalingManager();
+        }
+        return this.instance;
     }
 
     init() {
@@ -31,7 +38,6 @@ export class SignalingManager {
             if (this.callbacks[type]) {
                 this.callbacks[type].forEach(({ callback }) => {
                     if (type === "ticker") {
-                        callback(message.data.data);
                         const newTicker: Partial<Ticker> = {
                             lastPrice: message.data.c,
                             high: message.data.h,
@@ -43,16 +49,24 @@ export class SignalingManager {
                         console.log(newTicker);
                         callback(newTicker);
                    }
+                   if (type === "depth") {
+                        // const newTicker: Partial<Ticker> = {
+                        //     lastPrice: message.data.c,
+                        //     high: message.data.h,
+                        //     low: message.data.l,
+                        //     volume: message.data.v,
+                        //     quoteVolume: message.data.V,
+                        //     symbol: message.data.s,
+                        // }
+                        // console.log(newTicker);
+                        // callback(newTicker);
+                        const updatedBids = message.data.b;
+                        const updatedAsks = message.data.a;
+                        callback({ bids: updatedBids, asks: updatedAsks });
+                    }
                 });
             }
         }
-    }
-
-    public static getInstance(signalingServerUrl?: string) {
-        if (!this.instance)  {
-            this.instance = new SignalingManager(signalingServerUrl);
-        }
-        return this.instance;
     }
 
     sendMessage(message: any) {
@@ -70,6 +84,7 @@ export class SignalingManager {
     async registerCallback(type: string, callback: any, id: string) {
         this.callbacks[type] = this.callbacks[type] || [];
         this.callbacks[type].push({ callback, id });
+        // "ticker" => callback
     }
 
     async deRegisterCallback(type: string, id: string) {
