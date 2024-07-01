@@ -62,9 +62,7 @@ function fillOrder(orderId: string, price: number, quantity: number, side: "buy"
         // asks should be sorted before you try to fill them
         orderbook.asks.forEach(o => {
             if (o.price <= price && quantity > 0) {
-                console.log("filling ask");
                 const filledQuantity = Math.min(quantity, o.quantity);
-                console.log(filledQuantity);
                 o.quantity -= filledQuantity;
                 bookWithQuantity.asks[o.price] = (bookWithQuantity.asks[o.price] || 0) - filledQuantity;
                 fills.push({

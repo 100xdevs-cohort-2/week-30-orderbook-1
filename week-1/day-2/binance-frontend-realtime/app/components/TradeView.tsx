@@ -19,7 +19,7 @@ export function TradeView({
         if (chartManagerRef.current) {
           chartManagerRef.current.destroy();
         }
-     
+
         const chartManager = new ChartManager(
           chartRef.current,
           [],

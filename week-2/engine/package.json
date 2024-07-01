@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "WITH_SNAPSHOT = true node dist/index.js",
-    "dev": "npm run build && WITH_SNAPSHOT = true npm run start",
+    "start": "WITH_SNAPSHOT=true node dist/index.js",
+    "dev": "npm run build && WITH_SNAPSHOT=true npm run start",
     "test": "vitest"
   },
   "keywords": [],

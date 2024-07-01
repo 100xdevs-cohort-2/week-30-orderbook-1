@@ -50,7 +50,7 @@ export class SignalingManager {
                             quoteVolume: message.data.V,
                             symbol: message.data.s,
                         }
-                        // console.log(newTicker);
+
                         callback(newTicker);
                    }
                    if(type === 'kline'){
