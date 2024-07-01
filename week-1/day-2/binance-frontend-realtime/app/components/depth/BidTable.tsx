@@ -1,9 +1,8 @@
 
 export const BidTable = ({ bids }: {bids: [string, string][]}) => {
     let currentTotal = 0; 
-    const relevantBids = bids.slice(0, 15);
-    const bidsWithTotal: [string, string, number][] = relevantBids.map(([price, quantity]) => [price, quantity, currentTotal += Number(quantity)]);
-    const maxTotal = relevantBids.reduce((acc, [_, quantity]) => acc + Number(quantity), 0);
+    const bidsWithTotal: [string, string, number][] = bids.map(([price, quantity]) => [price, quantity, currentTotal += Number(quantity)]);
+    const maxTotal = bids.reduce((acc, [_, quantity]) => acc + Number(quantity), 0);
 
     return <div>
         {bidsWithTotal?.map(([price, quantity, total]) => <Bid maxTotal={maxTotal} total={total} key={price} price={price} quantity={quantity} />)}
@@ -16,16 +15,17 @@ function Bid({ price, quantity, total, maxTotal }: { price: string, quantity: st
             style={{
                 display: "flex",
                 position: "relative",
+                marginTop:4,
                 width: "100%",
                 backgroundColor: "transparent",
-                overflow: "hidden",
+                // overflow: "hidden",
             }}
         >
         <div
             style={{
             position: "absolute",
             top: 0,
-            left: 0,
+            right: 0,
             width: `${(100 * total) / maxTotal}%`,
             height: "100%",
             background: "rgba(1, 167, 129, 0.325)",

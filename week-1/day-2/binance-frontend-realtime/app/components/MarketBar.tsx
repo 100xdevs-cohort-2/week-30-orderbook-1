@@ -8,7 +8,7 @@ export const MarketBar = ({market}: {market: string}) => {
     const [ticker, setTicker] = useState<Ticker | null>(null);
 
     useEffect(() => {
-        getTicker(market).then(setTicker);
+    
         SignalingManager.getInstance().registerCallback("ticker", (data: Partial<Ticker>)  =>  setTicker(prevTicker => ({
             firstPrice: data?.firstPrice ?? prevTicker?.firstPrice ?? '',
             high: data?.high ?? prevTicker?.high ?? '',
@@ -20,11 +20,16 @@ export const MarketBar = ({market}: {market: string}) => {
             symbol: data?.symbol ?? prevTicker?.symbol ?? '',
             trades: data?.trades ?? prevTicker?.trades ?? '',
             volume: data?.volume ?? prevTicker?.volume ?? '',
-        })), `TICKER-${market}`);
+
+        })), `Ticker-${market}`);
+
+
+
         SignalingManager.getInstance().sendMessage({"method":"SUBSCRIBE","params":[`ticker.${market}`]}	);
 
         return () => {
             SignalingManager.getInstance().deRegisterCallback("ticker", `TICKER-${market}`);
+
             SignalingManager.getInstance().sendMessage({"method":"UNSUBSCRIBE","params":[`ticker.${market}`]}	);
         }
     }, [market])
@@ -33,7 +38,7 @@ export const MarketBar = ({market}: {market: string}) => {
     return <div>
         <div className="flex items-center flex-row relative w-full overflow-hidden border-b border-slate-800">
             <div className="flex items-center justify-between flex-row no-scrollbar overflow-auto pr-4">
-                    <Ticker market={market} />
+                    <TickerComponent market={market} />
                     <div className="flex items-center flex-row space-x-8 pl-4">
                         <div className="flex flex-col h-full justify-center">
                             <p className={`font-medium tabular-nums text-greenText text-md text-green-500`}>${ticker?.lastPrice}</p>
@@ -63,7 +68,7 @@ export const MarketBar = ({market}: {market: string}) => {
 
 }
 
-function Ticker({market}: {market: string}) {
+function TickerComponent({market}: {market: string}) {
     return <div className="flex h-[60px] shrink-0 space-x-4">
         <div className="flex flex-row relative ml-2 -mr-4">
             <img alt="SOL Logo" loading="lazy" decoding="async" data-nimg="1" className="z-10 rounded-full h-6 w-6 mt-4 outline-baseBackgroundL1"  src="/sol.webp" />

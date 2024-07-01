@@ -25,4 +25,7 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .no-scrollbar{
+    scrollbar-width: none;
+  }
 }

@@ -1,4 +1,4 @@
-import { Ticker } from "./types";
+import { Depth, KLine, Ticker, Trade } from "./types";
 
 export const BASE_URL = "wss://ws.backpack.exchange/"
 
@@ -35,9 +35,13 @@ export class SignalingManager {
         this.ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
             const type = message.data.e;
+            console.log(type);
             if (this.callbacks[type]) {
                 this.callbacks[type].forEach(({ callback }) => {
                     if (type === "ticker") {
+
+                        
+
                         const newTicker: Partial<Ticker> = {
                             lastPrice: message.data.c,
                             high: message.data.h,
@@ -48,6 +52,27 @@ export class SignalingManager {
                         }
 
                         callback(newTicker);
+                   }
+                   if(type === 'kline'){
+                       const newKline = {
+                           close: parseFloat(message.data.c),
+                           start: message.data.t,
+                           high: parseFloat(message.data.h),
+                           low: parseFloat(message.data.l),
+                           open: parseFloat(message.data.o),
+                       }
+                       console.log(newKline);
+                       callback(newKline);
+                   }
+                   if(type === 'trade'){
+                    console.log(message.data);
+                       const newTrade: Partial<Trade> = {
+                           price: message.data.p,
+                           quantity: message.data.q,
+                           timestamp: message.data.T,
+                       }
+                       console.log(newTrade);
+                       callback(newTrade);
                    }
                    if (type === "depth") {
                         // const newTicker: Partial<Ticker> = {
@@ -64,6 +89,7 @@ export class SignalingManager {
                         const updatedAsks = message.data.a;
                         callback({ bids: updatedBids, asks: updatedAsks });
                     }
+
                 });
             }
         }
