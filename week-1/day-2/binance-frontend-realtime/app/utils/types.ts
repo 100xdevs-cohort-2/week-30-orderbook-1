@@ -38,3 +38,21 @@ export interface Ticker {
     "trades": string,
     "volume": string
 }
+
+export interface MarketData {
+    "name" : string,
+    "symbol" : string,
+    "image": string,
+    "market_cap": number,
+}
+
+export interface Market{
+    "name" : string,
+    "symbol" : string,
+    "image": string,
+    "market_cap": number,
+    "lastPrice": string,
+    "priceChangePercent": string,
+    "marketSymbol" : string
+    "quoteVolume": string
+}
