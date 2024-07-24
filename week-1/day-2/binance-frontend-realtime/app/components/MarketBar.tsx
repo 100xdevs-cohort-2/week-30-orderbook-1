@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+// @ts-ignore
 import { Ticker } from "../utils/types";
 import { getTicker } from "../utils/httpClient";
 import { SignalingManager } from "../utils/SignalingManager";
