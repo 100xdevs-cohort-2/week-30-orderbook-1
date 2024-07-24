@@ -2,14 +2,12 @@
 import { MarketBar } from "@/app/components/MarketBar";
 import { SwapUI } from "@/app/components/SwapUI";
 import { TradeView } from "@/app/components/TradeView";
-import { Trades } from "@/app/components/Trades";
 import { Depth } from "@/app/components/depth/Depth";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+
 
 export default function Page() {
     const { market } = useParams();
-    const [subSection , setSubSection] = useState<"Book" | "Trades">("Book");
 
     return <div className="flex flex-row flex-1">
         <div className="flex flex-col flex-1">

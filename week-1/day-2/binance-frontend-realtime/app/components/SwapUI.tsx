@@ -1,11 +1,46 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Ticker } from "../utils/types";
+import { SignalingManager } from "../utils/SignalingManager";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export function SwapUI({ market }: {market: string}) {
     const [amount, setAmount] = useState('');
     const [activeTab, setActiveTab] = useState('buy');
     const [type, setType] = useState('limit');
+    const [lastPrice , setLastPrice] = useState(0);
 
+    const showAlert = () =>
+    {
+        toast.warn('Application for Trade license pending! Inconvenience regretted.', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
+    }
+
+    useEffect(() =>
+    {
+        SignalingManager.getInstance().registerCallback("ticker", (data: Partial<Ticker>)  =>  {
+            // @ts-ignore
+            setLastPrice(data.lastPrice);
+        } , market);
+        SignalingManager.getInstance().sendMessage({"method":"SUBSCRIBE","params":[`ticker.${market}`]}	);
+
+        return(() =>
+        {
+            SignalingManager.getInstance().deRegisterCallback("ticker", market);
+            SignalingManager.getInstance().sendMessage({"method":"UNSUBSCRIBE","params":[`ticker.${market}`]}	);
+        
+        })
+    } , []);
     return <div>
         <div className="flex flex-col">
             <div className="flex flex-row h-[60px]">
@@ -32,7 +67,7 @@ export function SwapUI({ market }: {market: string}) {
                                 Price
                             </p>
                             <div className="flex flex-col relative">
-                                <input step="0.01" placeholder="0" className="h-12 rounded-lg border-2 border-solid border-baseBorderLight bg-[var(--background)] pr-12 text-right text-2xl leading-9 text-[$text] placeholder-baseTextMedEmphasis ring-0 transition focus:border-accentBlue focus:ring-0" type="text" value="134.38" />
+                                <input step="0.01" placeholder="0" className="h-12 rounded-lg border-2 border-solid border-baseBorderLight bg-[var(--background)] pr-12 text-right text-2xl leading-9 text-[$text] placeholder-baseTextMedEmphasis ring-0 transition focus:border-accentBlue focus:ring-0" type="text" value={lastPrice} />
                                 <div className="flex flex-row absolute right-1 top-1 p-2">
                                     <div className="relative">
                                         <img src="/usdc.webp" className="w-6 h-6" />
@@ -41,7 +76,7 @@ export function SwapUI({ market }: {market: string}) {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2" onClick={showAlert}>
                         <p className="text-xs font-normal text-baseTextMedEmphasis">
                             Quantity
                         </p>
@@ -71,7 +106,11 @@ export function SwapUI({ market }: {market: string}) {
                             </div>
                         </div>
                     </div>
-                    <button type="button" className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" data-rac="">Buy</button>
+                    {activeTab === 'buy' ? <button type="button" className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" onClick={showAlert} data-rac="">Buy</button> :
+                    <button type="button" className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-redPrimaryButtonBackground text-redPrimaryButtonText active:scale-98" onClick={showAlert} data-rac="">Sell</button>
+                    }
+
+
                     <div className="flex justify-between flex-row mt-1">
                         <div className="flex flex-row gap-2">
                             <div className="flex items-center">
@@ -87,6 +126,8 @@ export function SwapUI({ market }: {market: string}) {
             </div>
         </div>
     </div>
+    <ToastContainer
+        />
 </div>
 }
 

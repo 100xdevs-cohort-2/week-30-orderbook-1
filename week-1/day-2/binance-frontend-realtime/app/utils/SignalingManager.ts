@@ -28,7 +28,6 @@ export class SignalingManager {
         }
         this.ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
-            console.log(message);
             const type = message.data.e;
             if (this.callbacks[type]) {
                 this.callbacks[type].forEach(({ callback }) => {
@@ -41,7 +40,6 @@ export class SignalingManager {
                             quoteVolume: message.data.V,
                             symbol: message.data.s,
                         }
-                        console.log(newTicker);
                         callback(newTicker);
                    }else if(type === "depth")
                    {

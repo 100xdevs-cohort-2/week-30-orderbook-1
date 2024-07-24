@@ -18,6 +18,7 @@ const config: Config = {
         baseBackgroundL2: "rgb(32,33,39)",
         baseBackgroundL3: "rgb(56 58 69)",
         greenPrimaryButtonBackground: "rgb(0,194,120)",
+        redPrimaryButtonBackground: "rgb(253 75 78)",
         greenText: 'rgb(0 194 120)',
         redText: 'rgb(253 75 78)',
         baseTextHighEmphasis: 'rgb(244, 244, 246)',
