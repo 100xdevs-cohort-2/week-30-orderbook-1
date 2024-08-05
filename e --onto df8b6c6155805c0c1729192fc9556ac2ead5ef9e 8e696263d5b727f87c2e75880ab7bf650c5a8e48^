@@ -1,0 +1,71 @@
+[33mcommit 8e696263d5b727f87c2e75880ab7bf650c5a8e48[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: RitikBora <ritik.bora@xecurify.com>
+Date:   Wed Jul 24 16:05:29 2024 +0530
+
+    removed nodemoduels
+
+[33mcommit f274fcd3cd75a7ea02481be3d2cea3a03122a389[m
+Author: RitikBora <ritik.bora@xecurify.com>
+Date:   Wed Jul 24 16:03:21 2024 +0530
+
+    deployment ready
+
+[33mcommit df8b6c6155805c0c1729192fc9556ac2ead5ef9e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: RitikBora <ritik.bora@xecurify.com>
+Date:   Wed Jul 24 14:55:23 2024 +0530
+
+    frontend completed
+
+[33mcommit 146da1531c99ea9ab5d967203c10bfeb8a2a73d2[m
+Author: RitikBora <ritik.bora@xecurify.com>
+Date:   Mon Jul 1 17:00:44 2024 +0530
+
+    added market data
+
+[33mcommit 1d89ab6f2649b672f21372ad63fa41c2daad77b3[m
+Author: RitikBora <ritik.bora@xecurify.com>
+Date:   Fri Jun 28 00:21:29 2024 +0530
+
+    live trades added
+
+[33mcommit 213f2f9f16ddb0b6f2bce90b4533c40c3d9d6b88[m
+Author: RitikBora <ritik.bora@xecurify.com>
+Date:   Thu Jun 27 09:44:39 2024 +0530
+
+    Realtime deapth added
+
+[33mcommit c4dce0946d17af63d2e26bf5adc95bd9b894115b[m
+Author: RitikBora <ritik.bora@xecurify.com>
+Date:   Mon Jun 24 14:58:54 2024 +0530
+
+    Tailwind custom classes init
+
+[33mcommit a211bad173f906fd40d13867e8d0984f114e2989[m
+Author: harkirat <harkirat96@gmail.com>
+Date:   Sun Jun 23 18:41:03 2024 +0530
+
+    Updated readme
+
+[33mcommit 5732d4a3fda44e62d45d4ecc8fd2146c136a0256[m
+Author: harkirat <harkirat96@gmail.com>
+Date:   Sun Jun 23 18:31:14 2024 +0530
+
+    Added border
+
+[33mcommit fc2126a98259c92ee0e645ad809613e05bfbb7ad[m
+Author: harkirat <harkirat96@gmail.com>
+Date:   Sun Jun 23 18:27:07 2024 +0530
+
+    Renamed fodlers
+
+[33mcommit 4486b4018b2232c79ca1787b3c9bf6f833347844[m
+Author: harkirat <harkirat96@gmail.com>
+Date:   Sun Jun 23 18:22:40 2024 +0530
+
+    Day 2 added
+
+[33mcommit c69a0f9db91c1a8edf4199c1e6a199190227557e[m
+Author: harkirat <harkirat96@gmail.com>
+Date:   Sat Jun 22 18:13:07 2024 +0530
+
+    Basic orderbook
