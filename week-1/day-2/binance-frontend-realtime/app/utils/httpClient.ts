@@ -2,7 +2,7 @@ import axios from "axios";
 import { Depth, KLine, MarketData, Ticker, Trade } from "./types";
 import { allSymbols } from "./consts";
 
-const BASE_URL = "https://exchange-proxy.100xdevs.com/api/v1";
+const BASE_URL = "http://localhost:3006/api/v1";
 const MARKET_URL = "https://price-indexer.workers.madlads.com/?ids=solana,usd-coin,pyth-network,jito-governance-token,tether,bonk,helium,helium-mobile,bitcoin,ethereum,dogwifcoin,jupiter-exchange-solana,parcl,render-token,sharky-fi,tensor,wormhole,wen-4,cat-in-a-dogs-world,book-of-meme,raydium,hivemapper,kamino,drift-protocol,nyan,jeo-boden,habibi-sol,io,zeta,shuffle-2,pepe,shiba-inu,chainlink,uniswap,ondo-finance,holograph,starknet,matic-network,fantom,mon-protocol,blur,worldcoin-wld,polyhedra-network,unagi-token,layerzero";
 
 export async function getTicker(market: string): Promise<Ticker> {
@@ -15,7 +15,16 @@ export async function getTicker(market: string): Promise<Ticker> {
 }
 
 export async function getTickers(): Promise<Ticker[]> {
-    const response = await axios.get(`${BASE_URL}/tickers`);
+     const response = await axios.get(`${BASE_URL}/tickers`, {
+        headers: {
+            'Referer': 'https://rb.com', // Set this to the domain you want to mimic
+            'Origin': 'https://rb.com',  // Set this to the domain you want to mimic
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36', // Optional: Mimic a specific user-agent if needed
+            'Accept': 'application/json, text/plain, */*',
+            'Accept-Language': 'en-US,en;q=0.9'
+            // Add other headers as needed
+        }
+    });
     return response.data;
 }
 
